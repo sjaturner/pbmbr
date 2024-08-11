@@ -29,6 +29,7 @@ int main(int argc, char *argv[])
     int width = 0;
     int height = 0;
 
+    /* Read the header. */
     if (1 != scanf("P%d", &type) || 1 != scanf("%d", &width) || 1 != scanf("%d", &height))
     {
         fprintf(stderr, "header error, see https://en.wikipedia.org/wiki/Netpbm\n");
@@ -40,6 +41,7 @@ int main(int argc, char *argv[])
     int pixel_offset = 0;
     int value = 0;
 
+    /* Now read the remaining bits and store them in the allocated area. */
     while ((value = getchar()) != EOF)
     {
         switch (value)
@@ -58,6 +60,7 @@ int main(int argc, char *argv[])
         }
     }
 
+    /* Any command line arguments will make the output display in hashes and spaces, this is one pixel per cell on the screen. */
     if (argc > 1)
     {
         for (int y = 0; y < height; ++y)
@@ -71,6 +74,7 @@ int main(int argc, char *argv[])
     }
     else
     {
+        /* Try rendering in Braille characters, that way we fit eight pixels into a character cell. */
         enum
         {
             CELL_WIDTH = 2,
@@ -102,7 +106,7 @@ int main(int argc, char *argv[])
                 };
 
                 unsigned int cell = 0;
-                for (int bit = 0; bit < sizeof(offset) / sizeof(offset[0]); ++bit)
+                for (unsigned int bit = 0; bit < sizeof(offset) / sizeof(offset[0]); ++bit)
                 {
                     cell |= pixel_lit(pixels, width, height, top_left_x + offset[bit].x, top_left_y + offset[bit].y) << bit;
                 }
@@ -119,8 +123,6 @@ int main(int argc, char *argv[])
                 //     for val in $(seq 0 255) ; do printf "%02x\n" $(( 0x2800 + $val)) ; done | sed "s/.*/echo $\'\\\U&\' '           '/" | bash | od -tx1
                 //
                 printf("%c%c%c", 0xe2, 0xa0 + (mapped_cell >> 6), 0x80 + (mapped_cell & 0x3f));
-
-
             }
             printf("\n");
         }
