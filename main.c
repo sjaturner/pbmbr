@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
 
     if (1 != scanf("P%d", &type) || 1 != scanf("%d", &width) || 1 != scanf("%d", &height))
     {
-        fprintf(stderr, "header error, see https://en.wikipedia.org/wiki/Netpbm\n"); 
+        fprintf(stderr, "header error, see https://en.wikipedia.org/wiki/Netpbm\n");
         exit(EXIT_FAILURE);
     }
 
@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     int pixel_offset = 0;
     int value = 0;
 
-    while((value = getchar()) != EOF)
+    while ((value = getchar()) != EOF)
     {
         switch (value)
         {
@@ -48,7 +48,7 @@ int main(int argc, char *argv[])
             case '1':
                 if (pixel_offset >= total_pixels)
                 {
-                    fprintf(stderr, "excess pixels, see https://en.wikipedia.org/wiki/Netpbm\n"); 
+                    fprintf(stderr, "excess pixels, see https://en.wikipedia.org/wiki/Netpbm\n");
                 }
                 pixels[pixel_offset / 8] |= (value == '1') << (pixel_offset % 8);
                 ++pixel_offset;
@@ -66,7 +66,7 @@ int main(int argc, char *argv[])
             {
                 printf("%c", pixel_lit(pixels, width, height, x, y) ? '#' : ' ');
             }
-            printf("\n"); 
+            printf("\n");
         }
     }
     else
