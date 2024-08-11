@@ -2,7 +2,7 @@
 
 ## Background
 
-I use Xternm and I think it's quite pleasing to be able to render graphics
+I use Xterm and I think it's quite pleasing to be able to render graphics
 from the command line. Xterm is reasonably good at this and even supports
 Sixel graphics: https://en.wikipedia.org/wiki/Sixel
 
@@ -50,7 +50,7 @@ write that to stdout. The pbmbr program renders that.
 
 The result looks like this:
 
-    ![circle_example](circle_example.png)
+![circle_example](circle_example.png)
 
 I've included a script called stipple which I found on the web. It attempts to 
 convert an input file - which may be just a JPG - into a PBM. YMMV
@@ -60,4 +60,4 @@ convert an input file - which may be just a JPG - into a PBM. YMMV
 
 Resulting in:
 
-    ![london_calling](london_calling.png)
+![london_calling](london_calling.png)
