@@ -1,8 +1,5 @@
 #include <stdio.h>
-#include <locale.h>
-#include <stdint.h>
-#include <wchar.h>
-#include <string.h>
+//#include <stdint.h>
 #include <stdlib.h>
 
 static inline int pixel_lit(unsigned char *pixels, int width, int height, int x, int y)
@@ -111,7 +108,7 @@ int main(int argc, char *argv[])
                     cell |= pixel_lit(pixels, width, height, top_left_x + offset[bit].x, top_left_y + offset[bit].y) << bit;
                 }
 
-                uint8_t mapped_cell = 0; /* See https://en.wikipedia.org/wiki/Braille_Patterns */
+                unsigned char mapped_cell = 0; /* See https://en.wikipedia.org/wiki/Braille_Patterns */
 
                 mapped_cell |= cell >> 0 & 0x07;
                 mapped_cell |= cell >> 1 & 0x38;

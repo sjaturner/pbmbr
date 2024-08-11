@@ -1,0 +1,2 @@
+#!/bin/bash
+convert xc:White xc:Black -append -write mpr:blackwhite +delete -modulate 100,0,100 -auto-level +level 30%%,90%% -remap mpr:blackwhite -compress none $1 PBM:-
