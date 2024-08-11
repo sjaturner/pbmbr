@@ -9,7 +9,7 @@ Sixel graphics: https://en.wikipedia.org/wiki/Sixel
 Unfortunately, as well as Xterm, I'm almost always using Tmux
 https://github.com/tmux/tmux/wiki and tmux just throws away Sixel codes.
 
-To be fair, Recent versions of Tmux do have support for Sixel graphics but,
+To be fair, recent versions of Tmux do have support for Sixel graphics but,
 given that I only really use Debian stable, there's a chance that won't
 appear until we've all retired.
 
