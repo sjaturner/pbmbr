@@ -23,7 +23,7 @@ static inline int pixel_lit(unsigned char *pixels, int width, int height, int x,
     }
 }
 
-int main()
+int main(int argc, char *argv[])
 {
     int type = 0;
     int width = 0;
@@ -58,62 +58,71 @@ int main()
         }
     }
 
-    for (int y = 0; y < height; ++y)
+    if (argc > 1)
     {
-        for (int x = 0; x < width; ++x)
+        for (int y = 0; y < height; ++y)
         {
-            printf("%c", pixel_lit(pixels, width, height, x, y) ? '#' : ' ');
-        }
-        printf("\n"); 
-    }
-
-    enum
-    {
-        CELL_WIDTH = 2,
-        CELL_HEIGHT = 4,
-    };
-    int horizontal_cells = (width + CELL_WIDTH - 1) / CELL_WIDTH;
-    int vertical_cells = (height + CELL_HEIGHT - 1) / CELL_HEIGHT;
-
-    for (int vertical_cell = 0; vertical_cell < vertical_cells; ++vertical_cell)
-    {
-        for (int horizontal_cell = 0; horizontal_cell < horizontal_cells; ++horizontal_cell)
-        {
-            int top_left_x = horizontal_cell * CELL_WIDTH;
-            int top_left_y = vertical_cell * CELL_HEIGHT;
-
-            struct
+            for (int x = 0; x < width; ++x)
             {
-                int x;
-                int y;
-            } offset[] = {
-                {0, 0},
-                {0, 1},
-                {0, 2},
-                {0, 3},
-                {1, 0},
-                {1, 1},
-                {1, 2},
-                {1, 3},
-            };
-
-            unsigned int cell = 0;
-            for (int bit = 0; bit < sizeof(offset) / sizeof(offset[0]); ++bit)
-            {
-                cell |= pixel_lit(pixels, width, height, top_left_x + offset[bit].x, top_left_y + offset[bit].y) << bit;
+                printf("%c", pixel_lit(pixels, width, height, x, y) ? '#' : ' ');
             }
-
-            uint8_t mapped_cell = 0; /* See https://en.wikipedia.org/wiki/Braille_Patterns */
-            mapped_cell |= cell >> 0 & 0x07;
-            mapped_cell |= cell >> 1 & 0x38;
-            mapped_cell |= cell << 3 & 0x40;
-            mapped_cell |= cell << 0 & 0x80;
-
-//          wchar_t unicode = 0x2800 + mapped_cell;
-            printf("%c%c%c", 0xe2, 0xa0 + (mapped_cell >> 6), 0x80 + (mapped_cell & 0x3f));
-
-
+            printf("\n"); 
         }
-        printf("\n");
+    }
+    else
+    {
+        enum
+        {
+            CELL_WIDTH = 2,
+            CELL_HEIGHT = 4,
+        };
+        int horizontal_cells = (width + CELL_WIDTH - 1) / CELL_WIDTH;
+        int vertical_cells = (height + CELL_HEIGHT - 1) / CELL_HEIGHT;
+
+        for (int vertical_cell = 0; vertical_cell < vertical_cells; ++vertical_cell)
+        {
+            for (int horizontal_cell = 0; horizontal_cell < horizontal_cells; ++horizontal_cell)
+            {
+                int top_left_x = horizontal_cell * CELL_WIDTH;
+                int top_left_y = vertical_cell * CELL_HEIGHT;
+
+                struct
+                {
+                    int x;
+                    int y;
+                } offset[] = {
+                    {0, 0},
+                    {0, 1},
+                    {0, 2},
+                    {0, 3},
+                    {1, 0},
+                    {1, 1},
+                    {1, 2},
+                    {1, 3},
+                };
+
+                unsigned int cell = 0;
+                for (int bit = 0; bit < sizeof(offset) / sizeof(offset[0]); ++bit)
+                {
+                    cell |= pixel_lit(pixels, width, height, top_left_x + offset[bit].x, top_left_y + offset[bit].y) << bit;
+                }
+
+                uint8_t mapped_cell = 0; /* See https://en.wikipedia.org/wiki/Braille_Patterns */
+
+                mapped_cell |= cell >> 0 & 0x07;
+                mapped_cell |= cell >> 1 & 0x38;
+                mapped_cell |= cell << 3 & 0x40;
+                mapped_cell |= cell << 0 & 0x80;
+
+                //
+                // Reverse engineered the coding like this:
+                //     for val in $(seq 0 255) ; do printf "%02x\n" $(( 0x2800 + $val)) ; done | sed "s/.*/echo $\'\\\U&\' '           '/" | bash | od -tx1
+                //
+                printf("%c%c%c", 0xe2, 0xa0 + (mapped_cell >> 6), 0x80 + (mapped_cell & 0x3f));
+
+
+            }
+            printf("\n");
+        }
     }
 }
